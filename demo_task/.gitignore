@@ -1,2 +1,4 @@
 files_to_check/*
 results_of_generation/*
+!results_of_generation/.gitkeep 
+!files_to_check/.gitkeep 
