@@ -1,0 +1,15 @@
+{
+    "model_version": "gpt-4o",
+    "model_constant": "You are Soviet Comrad!",
+    "important_timezones": {
+                    "America/Vancouver": "Vancouver",
+                    "Europe/Zurich": "Switzerland",
+                    "Israel": "Israel",
+                    "Asia/Samarkand": "Samarkand",
+                    "Asia/Singapore": "Bali",
+                    "UTC": "UTC"
+    },
+    "picture_model": "dall-e-3",
+    "picture_quality": "standart",
+    "picture_resolution": "1024x1024"
+}
