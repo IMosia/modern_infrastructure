@@ -1,0 +1,7 @@
+services:
+  telegram-bot:
+    build:
+      context: app
+    restart: no
+    env_file:
+        - /app/.env

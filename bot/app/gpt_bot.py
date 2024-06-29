@@ -4,6 +4,7 @@ from openai import OpenAI
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, Updater, ConversationHandler, CallbackContext
 import json
+import logging
 
 from src.commands import start, world_time_now, provide_picture_and_ask_prompt
 from src.gpt_handler import message_acrhistator
@@ -26,9 +27,26 @@ model_version = config['model_version']
 model_constant = config['model_constant']
 important_timezones = config['important_timezones']
 
+# logging
+# Enable logging
+logging.basicConfig(
+    format='timestamp=%(asctime)s logger=%(name)s level=%(levelname)s msg="%(message)s"',
+    datefmt='%Y-%m-%dT%H:%M:%S',
+    level=logging.INFO,
+    handlers=[
+        logging.StreamHandler()
+    ]
+)
+# set higher logging level for httpx to avoid all GET and POST requests being logged
+logging.getLogger("httpx").setLevel(logging.WARNING)
+# https://stackoverflow.com/questions/2183233/how-to-add-a-custom-loglevel-to-pythons-logging-facility
+
+logger = logging.getLogger(__name__)
+
 def main():
     # Create the Application and pass it your bot's token.
     application = Application.builder().token(BOT_TOKEN).build()
+    logging.info(f"Bot {BOT_NAME} started.")
 
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
