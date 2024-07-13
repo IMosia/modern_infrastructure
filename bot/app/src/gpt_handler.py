@@ -15,6 +15,8 @@ import asyncio
 import sys
 sys.path.append('..')
 
+from src.decorators import decorator_logging
+from src.general_src import escape_markdown, split_into_chunks
 
 
 # config from config.json
@@ -33,6 +35,7 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 # Init OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY)
 
+@decorator_logging
 async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Get response from GPT based on user message
@@ -58,14 +61,20 @@ async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE
         ]
         )
     )
-    ai_response = response.choices[0].message.content
+    ai_response = escape_markdown(response.choices[0].message.content)
+    chunks_of_response = split_into_chunks(ai_response.strip())
 
     keep_typing.is_typing = False
 
-    typing_task.cancel()
-    await update.message.reply_text(ai_response.strip())
-    
+    for chunk in chunks_of_response:
+        await update.message.reply_text(chunk
+                                        , reply_to_message_id=update.message.message_id
+                                        , parse_mode='MarkdownV2'
+                                        )
 
+    typing_task.cancel()
+    
+@decorator_logging
 async def provide_picture(update: Update, context: ContextTypes.DEFAULT_TYPE, user_prompt: str):
     """
     To provide picture from GPT based on promt from user

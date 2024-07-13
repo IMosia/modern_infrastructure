@@ -11,6 +11,7 @@ import pytz
 from src.gpt_handler import provide_picture
 import asyncio
 import sys
+from src.decorators import decorator_logging
 sys.path.append('..')
 
 # env variables
@@ -18,13 +19,14 @@ load_dotenv()
 BOT_NAME =  os.getenv('BOT_NAME')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 
+@decorator_logging
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Send a message when the command /start is issued.
     """
     await update.message.reply_text(f"Greatings, call me {BOT_NAME}!")
 
-
+@decorator_logging
 async def world_time_now(important_timezones: dict, update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Send a message when the command /world_time is issued.
@@ -48,7 +50,7 @@ async def world_time_now(important_timezones: dict, update: Update, context: Con
 
     await update.message.reply_text(message, parse_mode='MarkdownV2')
 
-
+@decorator_logging
 async def provide_picture_and_ask_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     When the command /picture is issued, ask for a prompt.

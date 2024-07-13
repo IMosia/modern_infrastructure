@@ -8,6 +8,7 @@ import logging
 
 from src.commands import start, world_time_now, provide_picture_and_ask_prompt
 from src.gpt_handler import message_acrhistator
+from src.decorators import decorator_logging
 
 # env variables
 load_dotenv()
@@ -27,22 +28,6 @@ model_version = config['model_version']
 model_constant = config['model_constant']
 important_timezones = config['important_timezones']
 
-# logging
-# Enable logging
-logging.basicConfig(
-    format='timestamp=%(asctime)s logger=%(name)s level=%(levelname)s msg="%(message)s"',
-    datefmt='%Y-%m-%dT%H:%M:%S',
-    level=logging.INFO,
-    handlers=[
-        logging.StreamHandler()
-    ]
-)
-# set higher logging level for httpx to avoid all GET and POST requests being logged
-logging.getLogger("httpx").setLevel(logging.WARNING)
-# https://stackoverflow.com/questions/2183233/how-to-add-a-custom-loglevel-to-pythons-logging-facility
-
-logger = logging.getLogger(__name__)
-
 def main():
     # Create the Application and pass it your bot's token.
     application = Application.builder().token(BOT_TOKEN).build()
@@ -52,9 +37,6 @@ def main():
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("current_time",
                                             lambda update, context: world_time_now(important_timezones, update, context)))
-    #application.add_handler(CommandHandler("picture", provide_picture_and_ask_prompt))
-
-    #updater = Updater(bot=application.bot, update_queue=application.update_queue)
 
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('picture', start_picture_command)],
