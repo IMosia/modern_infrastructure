@@ -15,7 +15,7 @@ import asyncio
 import sys
 sys.path.append('..')
 
-from src.decorators import decorator_logging
+from src.decorators import decorator_logging, decorator_check_if_user_is_allowed, decorator_has_enough_money_for_picture
 from src.general_src import escape_markdown, split_into_chunks
 
 
@@ -36,6 +36,7 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 @decorator_logging
+@decorator_check_if_user_is_allowed
 async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Get response from GPT based on user message
@@ -75,6 +76,8 @@ async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE
     typing_task.cancel()
     
 @decorator_logging
+@decorator_check_if_user_is_allowed
+@decorator_has_enough_money_for_picture
 async def provide_picture(update: Update, context: ContextTypes.DEFAULT_TYPE, user_prompt: str):
     """
     To provide picture from GPT based on promt from user
@@ -106,6 +109,7 @@ async def provide_picture(update: Update, context: ContextTypes.DEFAULT_TYPE, us
     keep_upload_photo.is_upload_photo = False
 
     keep_upload_photo_task.cancel()
+    
     await update.message.reply_photo(BytesIO(response.content))
     
 

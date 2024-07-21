@@ -11,7 +11,7 @@ import pytz
 from src.gpt_handler import provide_picture
 import asyncio
 import sys
-from src.decorators import decorator_logging
+from src.decorators import decorator_logging, decorator_check_if_user_is_allowed
 sys.path.append('..')
 
 # env variables
@@ -51,6 +51,7 @@ async def world_time_now(important_timezones: dict, update: Update, context: Con
     await update.message.reply_text(message, parse_mode='MarkdownV2')
 
 @decorator_logging
+@decorator_check_if_user_is_allowed
 async def provide_picture_and_ask_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     When the command /picture is issued, ask for a prompt.

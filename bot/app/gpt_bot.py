@@ -8,7 +8,7 @@ import logging
 
 from src.commands import start, world_time_now, provide_picture_and_ask_prompt
 from src.gpt_handler import message_acrhistator
-from src.decorators import decorator_logging
+from src.decorators import decorator_logging, decorator_check_if_user_is_allowed
 
 # env variables
 load_dotenv()
