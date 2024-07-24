@@ -5,7 +5,7 @@ The commands for the bot.
 import os
 from dotenv import load_dotenv
 from datetime import datetime
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, ConversationHandler, CallbackContext
 import pytz
 from src.gpt_handler import provide_picture
@@ -18,6 +18,25 @@ sys.path.append('..')
 load_dotenv()
 BOT_NAME =  os.getenv('BOT_NAME')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
+
+PROMPT_STATE = 1
+MEETING_STATE = 2
+
+@decorator_logging
+async def start_recording_meeting(update: Update, context: CallbackContext):
+    await update.message.reply_text("What was the meeting?", reply_markup=reply_markup)
+    keyboard = [
+        [InlineKeyboardButton("personal", callback_data='personal'),
+            InlineKeyboardButton("call", callback_data='call'),
+            InlineKeyboardButton("chat", callback_data='chat')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    return MEETING_STATE
+
+@decorator_logging
+async def start_picture_command(update: Update, context: CallbackContext):
+    await update.message.reply_text("Please provide a prompt for the picture.")
+    return PROMPT_STATE
 
 @decorator_logging
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):

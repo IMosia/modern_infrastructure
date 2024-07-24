@@ -2,13 +2,14 @@ from dotenv import load_dotenv
 import os
 from openai import OpenAI
 from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, Updater, ConversationHandler, CallbackContext
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, Updater, ConversationHandler, CallbackContext, CallbackQueryHandler
 import json
 import logging
 
-from src.commands import start, world_time_now, provide_picture_and_ask_prompt
+from src.commands import start, world_time_now, provide_picture_and_ask_prompt, start_picture_command, start_recording_meeting
 from src.gpt_handler import message_acrhistator
 from src.decorators import decorator_logging, decorator_check_if_user_is_allowed
+from src.collection_of_info import handle_meeting_type, handle_meeting_name
 
 # env variables
 load_dotenv()
@@ -16,10 +17,8 @@ BOT_NAME =  os.getenv('BOT_NAME')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 PROMPT_STATE = 1
-
-async def start_picture_command(update: Update, context: CallbackContext):
-    await update.message.reply_text("Please provide a prompt for the picture.")
-    return PROMPT_STATE
+MEETING_STATE = 2
+MEETING_STATE_SECOND = 3
 
 # config from config.json
 with open('config.json', 'r') as file:
@@ -46,6 +45,16 @@ def main():
         fallbacks=[]
     )
     application.add_handler(conv_handler)
+
+    meeting_handler = ConversationHandler(
+        entry_points=[CommandHandler('record_meeting', start_recording_meeting)],
+        states={
+            MEETING_STATE: [CallbackQueryHandler(handle_meeting_type)],
+            MEETING_STATE_SECOND: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_meeting_name)],
+        },
+        fallbacks=[]
+    )
+    application.add_handler(meeting_handler)
 
     # on non command i.e. message - echo the message on Telegram
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_acrhistator))

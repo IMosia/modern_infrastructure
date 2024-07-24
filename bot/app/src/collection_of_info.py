@@ -1,6 +1,11 @@
 import asyncpg
 import asyncio
 import os
+from telegram.ext import ConversationHandler, CallbackContext
+from telegram import Update
+
+MEETING_STATE_SECOND = 3
+IMAGE_PRICE = 10.0
 
 # make it as permament connection
 async def db_connect():
@@ -21,8 +26,6 @@ async def is_user_allowed(user_id: int) -> bool:
         await conn.close()
 
 
-IMAGE_PRICE = 10.0
-
 async def is_enough_balance_for_image(user_id: int) -> (bool, float):
     """
     Checks if the user has balance to generate an image.
@@ -37,6 +40,34 @@ async def is_enough_balance_for_image(user_id: int) -> (bool, float):
         return current_balance >= IMAGE_PRICE, current_balance
     finally:
         await conn.close()
+
+
+async def handle_meeting_type(update: Update, context: CallbackContext):
+    query = update.callback_query
+    await query.answer()
+    meeting_type = str(query.data)
+    context.user_data['meeting_type'] = meeting_type
+    await query.edit_message_text(f"So, with whom:")
+    return MEETING_STATE_SECOND
+
+
+async def handle_meeting_name(update: Update, context: CallbackContext):
+    meeting_type = context.user_data.get('meeting_type')
+
+    people_names_list = get_peoples_names()
+
+    # choose out of many
+    
+
+
+    conn = await db_connect()
+    await conn.execute("INSERT INTO feedback (timestamp, meeting_tyoe, person_name) VALUES (NOW(), $1, $2)"
+                        , meeting_type, person_name)
+    await conn.close()
+
+
+    return ConversationHandler.END
+
 
 def collect_information_on_request(Update):
     """
