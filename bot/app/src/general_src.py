@@ -4,7 +4,23 @@ def split_into_chunks(text, chunk_size=4096):
     """
     Split text into chunks of specified size.
     """
-    return [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
+    # TODO: add Markdown library
+    chunks = []
+    while len(text) > chunk_size:
+        chunk = text[:chunk_size-3]
+        text = text[chunk_size-3:]
+
+        n_code_blocks = chunk.count("```")
+        if n_code_blocks % 2 == 1:
+            last_code_block = chunk.rfind("```")
+            formating_info = chunk[last_code_block:].split(" ")[0]
+            chunk += "```"
+            text = f"{formating_info} {text}"
+
+        chunks.append(chunk)
+    chunks.append(text)
+
+    return chunks
 
 
 def escape_markdown(text: str) -> str:

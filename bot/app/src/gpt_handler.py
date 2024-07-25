@@ -73,10 +73,16 @@ async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE
     typing_task.cancel()
 
     for chunk in chunks_of_response:
-        await update.message.reply_text(chunk
-                                        , reply_to_message_id=update.message.message_id
-                                        , parse_mode='MarkdownV2'
-                                        )
+        try:
+            await update.message.reply_text(chunk
+                                            , reply_to_message_id=update.message.message_id
+                                            , parse_mode='MarkdownV2'
+                                            )
+        except:
+            # add logging here
+            await update.message.reply_text(chunk
+                                            , reply_to_message_id=update.message.message_id
+                                            )
 
     # collecting information after response
     generation_id = await collect_information_on_request(user_id, user_inquery, inquery_type='text', is_athena=tables_athena)
