@@ -13,3 +13,9 @@ def escape_markdown(text: str) -> str:
     escape_chars = r"\_*[]()~>#+-=|{}.!"
 
     return re.sub(f"([{re.escape(escape_chars)}])", r"\\\1", text)
+
+def make_from_guid_s3_name(guid: str) -> str:
+    """
+    Make s3 name from guid
+    """
+    return f"{guid}.jpg"

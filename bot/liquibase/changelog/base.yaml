@@ -12,7 +12,7 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                    - changeSet:
+  - changeSet:
       id: 2
       author: imosia
       changes:
@@ -42,3 +42,46 @@ databaseChangeLog:
             referencedTableName: allowed_users
             referencedColumnNames: user_id
             onDelete: CASCADE
+  - changeSet:
+      id: 3
+      author: imosia
+      changes:
+        - createTable:
+            tableName: user_requests
+            columns:
+              - column:
+                  name: timestamp
+                  type: TIMESTAMP
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: generation_id
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_inquery
+                  type: TEXT
+              - column:
+                  name: inquery_type
+                  type: varchar(255)
+  - changeSet:
+      id: 4
+      author: imosia
+      changes:
+        - createTable:
+            tableName: machine_responses
+            columns:
+              - column:
+                  name: generation_id
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: data_type
+                  type: varchar(255)
+              - column:
+                  name: ai_response
+                  type: TEXT
+             

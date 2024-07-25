@@ -56,7 +56,6 @@ def main():
     )
     application.add_handler(meeting_handler)
 
-    # on non command i.e. message - echo the message on Telegram
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_acrhistator))
 
     # Run the bot until the user presses Ctrl-C

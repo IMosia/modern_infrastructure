@@ -94,3 +94,15 @@ services:
         - "5005:5000"
       depends_on:
         - postgres
+  
+  picture-uploader:
+    build:
+      context: ./picture_uploader
+    env_file:
+      - ./picture_uploader/.env
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION}
+    ports:
+      - "5001:5001"

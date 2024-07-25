@@ -11,5 +11,9 @@
     },
     "picture_model": "dall-e-3",
     "picture_quality": "standart",
-    "picture_resolution": "1024x1024"
+    "picture_resolution": "1024x1024",
+    "bucket_name": "ai-response-pictures-danilevich-bot",
+    "image_price": 10,
+    "aws_region": "ap-southeast-1",
+    "tables_athena": false
 }

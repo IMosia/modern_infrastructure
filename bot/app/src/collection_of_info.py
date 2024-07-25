@@ -3,9 +3,21 @@ import asyncio
 import os
 from telegram.ext import ConversationHandler, CallbackContext
 from telegram import Update
+import uuid
+from src.general_src import make_from_guid_s3_name
+import json
+import requests
+import aiohttp
+
+with open('config.json', 'r') as file:
+    config = json.load(file)
+aws_region = config['aws_region']
+bucket_name = config['bucket_name']
+IMAGE_PRICE = config['image_price']
+
 
 MEETING_STATE_SECOND = 3
-IMAGE_PRICE = 10.0
+
 
 # make it as permament connection
 async def db_connect():
@@ -54,39 +66,79 @@ async def handle_meeting_type(update: Update, context: CallbackContext):
 async def handle_meeting_name(update: Update, context: CallbackContext):
     meeting_type = context.user_data.get('meeting_type')
 
-    people_names_list = get_peoples_names()
+   # people_names_list = get_peoples_names()
 
     # choose out of many
-    
-
-
-    conn = await db_connect()
-    await conn.execute("INSERT INTO feedback (timestamp, meeting_tyoe, person_name) VALUES (NOW(), $1, $2)"
-                        , meeting_type, person_name)
-    await conn.close()
-
+    #conn = await db_connect()
+    #await conn.execute("INSERT INTO feedback (timestamp, meeting_tyoe, person_name) VALUES (NOW(), $1, $2)"
+    #                    , meeting_type, person_name)
+    #await conn.close()
 
     return ConversationHandler.END
 
+# also adding people
 
-def collect_information_on_request(Update):
+async def collect_information_on_request(user_id, user_inquery, inquery_type, is_athena):
     """
     Collects information on user request
     """
-    user_id = Update.message.from_user.id
-    user_name = Update.message.from_user.first_name
-    user_last_name = Update.message.from_user.last_name
-    user_username = Update.message.from_user.username
-    chat_id = Update.message.chat.id
-    chat_type = Update.message.chat.type
-    chat_username = Update.message.chat.username
-    message_id = Update.message.message_id
-    message_text = Update.message.text
-    message_date = Update.message.date
-    group_chat_bool = Update.message.group_chat_created
+    # generate id as guid
+    generation_id = str(uuid.uuid4())
+    if is_athena:
+        pass
+    else:
+        conn = await db_connect()
+        await conn.fetchval("INSERT INTO user_requests (timestamp, user_id, generation_id, user_inquery, inquery_type) VALUES (NOW(), $1, $2, $3, $4)"
+                                                , user_id, generation_id, user_inquery, inquery_type)
+            
+        await conn.close()
+    return generation_id
 
-def collect_information_on_machine_response(Update):
+
+
+async def collect_information_on_machine_response_text(generation_id, ai_response, is_athena):
     """
-    Collects information on machine response
+    Collects information on machine response for generation of text
     """
+    if is_athena:
+        pass
+    else:
+        conn = await db_connect()
+        data_type = 'text'
+        await conn.fetchval("INSERT INTO machine_responses (generation_id, data_type, ai_response) VALUES ($1, $2, $3)"
+                                                , generation_id, data_type, ai_response)    
+        await conn.close()
+
     
+
+async def collect_information_on_machine_response_image(generation_id, link, is_athena):
+    """
+    Collects information on machine response for generation of pictures
+    """
+    data_type = 'image'
+    picture_name = make_from_guid_s3_name(generation_id)
+    full_s3_path = f"{bucket_name}/{picture_name}"
+
+    url = "http://picture-uploader:5001/api/request"
+    data = {
+        'link': link,
+        'picture_name': picture_name,
+        'bucket_name': bucket_name
+    }
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, json=data) as response:
+                if response.status != 200:
+                    print(f"Error while uploading picture to S3: {response.status} \n {response.text}")
+                else:
+                    print(f"Picture {picture_name} uploaded to S3, address: {bucket_name}/{picture_name}")
+                    if is_athena:
+                        pass
+                    else:
+                        conn = await db_connect()
+                        await conn.fetchval("INSERT INTO machine_responses (generation_id, data_type, ai_response) VALUES ($1, $2, $3)"
+                                                                , generation_id, data_type, full_s3_path)
+                        await conn.close()
+    except Exception as e:
+        print(f"Error while uploading picture to S3: {e}")
