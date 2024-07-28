@@ -40,8 +40,8 @@ jobs:
         working-directory: ./bot/app
 
   build_and_push:
-    needs:
-      - pylint
+   # needs:
+   #   - pylint
     permissions:
       contents: read
       packages: write
