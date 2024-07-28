@@ -11,7 +11,7 @@ on:
       - 'bot/**'
 
 env:
-  PROJECT_NAME: Danilevich_gpt_bot
+  PROJECT_NAME: danilevich_gpt_bot
 
 jobs:
   pylint:
