@@ -49,13 +49,13 @@ jobs:
     strategy:
       matrix:
         dir:
-          - ./bot/app
-          - ./bot/liquibase
+          - app
+          - liquibase
     steps:
       - uses: actions/checkout@v4
 
       - name: Build image
-        working-directory: ${{ matrix.dir }}
+        working-directory: ./bot/${{ matrix.dir }}
         run: docker build . --file Dockerfile --tag $PROJECT_NAME
 
       - name: Log in to registry
