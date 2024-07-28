@@ -49,8 +49,8 @@ jobs:
     strategy:
       matrix:
         dir:
-          - app
-          - liquibase
+          - ./bot/app
+          - ./bot/liquibase
     steps:
       - uses: actions/checkout@v4
 
