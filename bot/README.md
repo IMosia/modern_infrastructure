@@ -22,4 +22,4 @@ psql -U $POSTGRES_USER -d $POSTGRES_DB -c "DELETE FROM allowed_users WHERE user_
 > Ctrl + D
 ```  
 
-**DB** ```http://localhost:5005/```
+**Use-manager** ```http://localhost:5005/```  

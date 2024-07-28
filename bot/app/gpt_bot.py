@@ -6,10 +6,13 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, U
 import json
 import logging
 
+
 from src.commands import start, world_time_now, provide_picture_and_ask_prompt, start_picture_command, start_recording_meeting
 from src.gpt_handler import message_acrhistator
 from src.decorators import decorator_logging, decorator_check_if_user_is_allowed
 from src.collection_of_info import handle_meeting_type, handle_meeting_name
+
+
 
 # env variables
 load_dotenv()

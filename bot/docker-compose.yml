@@ -94,6 +94,8 @@ services:
         - "5005:5000"
       depends_on:
         - postgres
+      volumes:
+        - logs_volume:/user_manager/logs
   
   picture-uploader:
     build:

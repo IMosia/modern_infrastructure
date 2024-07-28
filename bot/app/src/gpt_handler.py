@@ -12,6 +12,14 @@ import requests
 from io import BytesIO
 import asyncio
 
+import telegramify_markdown
+from telegramify_markdown import customize
+
+# Configure telegramify_markdown
+customize.markdown_symbol.head_level_1 = "📌"
+customize.markdown_symbol.link = "🔗"
+customize.strict_markdown = True
+
 import sys
 sys.path.append('..')
 
@@ -74,10 +82,14 @@ async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE
 
     for chunk in chunks_of_response:
         try:
-            await update.message.reply_text(chunk
-                                            , reply_to_message_id=update.message.message_id
-                                            , parse_mode='MarkdownV2'
-                                            )
+            formatted_chunk = telegramify_markdown.markdownify(
+                    chunk,
+                    max_line_length=None,
+                    normalize_whitespace=False
+                )
+            await update.message.reply_text(formatted_chunk,
+                                            reply_to_message_id=update.message.message_id,
+                                            parse_mode="MarkdownV2")
         except:
             # add logging here
             await update.message.reply_text(chunk
