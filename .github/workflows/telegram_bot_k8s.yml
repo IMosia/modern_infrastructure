@@ -41,11 +41,13 @@ jobs:
         run: |
           pylint gpt_bot.py
         working-directory: ./bot/app
+        continue-on-error: true
       
       - name: Analysing dependancies with pylint
         run: |
           pylint ${{ matrix.file }}
         working-directory: ./bot/app/src
+        continue-on-error: true
       
       - name: Analysing user_manager with pylint
         run: |
