@@ -38,7 +38,7 @@ def main():
     # Create the Application and pass it your bot's token.
     application = Application.builder().token(BOT_TOKEN).build()
     logging.info(f"Bot {BOT_NAME} started.")
-
+#gpt_bot.py:40:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("current_time",

@@ -38,6 +38,18 @@ jobs:
         run: |
           pylint gpt_bot.py
         working-directory: ./bot/app
+      
+      - name: Analysing dependancies with pylint
+        matrix:
+          dir: [collection_of_info.py, commands.py, decorators.py, gpt_handler.py, general_src.py]
+          run: |
+            pylint ${{ matrix.dir }}
+          working-directory: ./bot/app/src
+      
+      - name: Analysing user_manager with pylint
+        run: |
+          pylint manager.py
+        working-directory: ./bot/user_manager
 
   build_and_push:
    # needs:
