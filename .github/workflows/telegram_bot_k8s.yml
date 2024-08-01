@@ -37,7 +37,7 @@ jobs:
           pip install -r requirements.txt
         working-directory: ./bot/app
 
-      - name: Analysing dependancies with pylint
+      - name: Analysing app code with pylint
         run: |
           pylint ${{ matrix.file }}
         working-directory: ./bot/app

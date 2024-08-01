@@ -3,14 +3,13 @@ The commands for the bot.
 """
 
 import os
+import sys
 from dotenv import load_dotenv
 from datetime import datetime
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, ConversationHandler, CallbackContext
 import pytz
 from src.gpt_handler import provide_picture
-import asyncio
-import sys
 from src.decorators import decorator_logging, decorator_check_if_user_is_allowed
 sys.path.append('..')
 
@@ -24,6 +23,7 @@ MEETING_STATE = 2
 
 @decorator_logging
 async def start_recording_meeting(update: Update, context: CallbackContext):
+    """Function to start recording a meeting."""
     await update.message.reply_text("What was the meeting?", reply_markup=reply_markup)
     keyboard = [
         [InlineKeyboardButton("personal", callback_data='personal'),
@@ -35,6 +35,7 @@ async def start_recording_meeting(update: Update, context: CallbackContext):
 
 @decorator_logging
 async def start_picture_command(update: Update, context: CallbackContext):
+    """Function to start the picture command - ask to reply wtih a prompt."""
     await update.message.reply_text("Please provide a prompt for the picture.")
     return PROMPT_STATE
 
@@ -78,8 +79,7 @@ async def provide_picture_and_ask_prompt(update: Update, context: ContextTypes.D
     """
 
     user_prompt = update.message.text.strip()
-    
-    await provide_picture(update, context, user_prompt)
-    
-    return ConversationHandler.END
 
+    await provide_picture(update, context, user_prompt)
+
+    return ConversationHandler.END

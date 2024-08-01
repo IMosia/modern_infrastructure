@@ -1,3 +1,7 @@
+"""
+Supporting functionality: decorators
+"""
+
 import logging
 from functools import wraps
 import asyncio
@@ -41,7 +45,7 @@ def decorator_logging(func):
                 logger.info(f"Function {func.__name__} returned {result}")
             return result
         return wrapper
-    
+
 
 def decorator_check_if_user_is_allowed(func):
     """Async wrapper which check if user is allowed

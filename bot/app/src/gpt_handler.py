@@ -2,12 +2,15 @@
 Module for funciton to communicate with OpenAI
 """
 
+import os
+import json
+import sys
+
 from telegram import Update
 from telegram.ext import ContextTypes
 from openai import OpenAI
 from dotenv import load_dotenv
-import os
-import json
+
 import requests
 from io import BytesIO
 import asyncio
@@ -15,17 +18,18 @@ import asyncio
 import telegramify_markdown
 from telegramify_markdown import customize
 
-# Configure telegramify_markdown
 customize.markdown_symbol.head_level_1 = "📌"
 customize.markdown_symbol.link = "🔗"
 customize.strict_markdown = True
 
-import sys
 sys.path.append('..')
 
-from src.decorators import decorator_logging, decorator_check_if_user_is_allowed, decorator_has_enough_money_for_picture
+from src.decorators import (decorator_logging, decorator_check_if_user_is_allowed
+                            , decorator_has_enough_money_for_picture)
 from src.general_src import escape_markdown, split_into_chunks
-from src.collection_of_info import collect_information_on_request, collect_information_on_machine_response_text, collect_information_on_machine_response_image
+from src.collection_of_info import (collect_information_on_request
+                                    , collect_information_on_machine_response_text
+                                    , collect_information_on_machine_response_image)
 
 
 # config from config.json
@@ -54,7 +58,8 @@ async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE
     async def keep_typing():
         while keep_typing.is_typing:
             try:
-                await context.bot.send_chat_action(chat_id=update.effective_chat.id, action='typing')
+                await context.bot.send_chat_action(chat_id=update.effective_chat.id
+                                                   , action='typing')
                 await asyncio.sleep(1)
             except asyncio.CancelledError:
                 return
@@ -97,7 +102,9 @@ async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE
                                             )
 
     # collecting information after response
-    generation_id = await collect_information_on_request(user_id, user_inquery, inquery_type='text', is_athena=tables_athena)
+    generation_id = await collect_information_on_request(user_id, user_inquery
+                                                         , inquery_type='text'
+                                                         , is_athena=tables_athena)
     await collect_information_on_machine_response_text(generation_id, ai_response, is_athena=tables_athena)
     
     
@@ -111,7 +118,8 @@ async def provide_picture(update: Update, context: ContextTypes.DEFAULT_TYPE, us
     async def keep_upload_photo():
         try:
             while keep_upload_photo.is_upload_photo:
-                await context.bot.send_chat_action(chat_id=update.effective_chat.id, action='upload_photo')
+                await context.bot.send_chat_action(chat_id=update.effective_chat.id
+                                                   , action='upload_photo')
                 await asyncio.sleep(1)
         except asyncio.CancelledError:
             return
@@ -119,7 +127,10 @@ async def provide_picture(update: Update, context: ContextTypes.DEFAULT_TYPE, us
     keep_upload_photo.is_upload_photo = True
     keep_upload_photo_task = asyncio.create_task(keep_upload_photo())
 
-    generation_id = await collect_information_on_request(update.message.from_user.id, user_prompt, inquery_type='picture', is_athena=tables_athena)
+    generation_id = await collect_information_on_request(update.message.from_user.id
+                                                         , user_prompt
+                                                         , inquery_type='picture'
+                                                         , is_athena=tables_athena)
 
     try:
         response = await asyncio.get_running_loop().run_in_executor(
@@ -140,13 +151,9 @@ async def provide_picture(update: Update, context: ContextTypes.DEFAULT_TYPE, us
     picture_url = response.data[0].url
     response = requests.get(picture_url)
 
-    
     await update.message.reply_photo(BytesIO(response.content))
 
     keep_upload_photo.is_upload_photo = False
     keep_upload_photo_task.cancel()
 
     await collect_information_on_machine_response_image(generation_id, picture_url, is_athena=tables_athena)
-    
-
-    

@@ -1,13 +1,18 @@
-import asyncpg
-import asyncio
+"""
+This module contains function to collect information and communicate with the database.
+"""
+
 import os
+import uuid
+import json
+
+import aiohttp
+import asyncpg
 from telegram.ext import ConversationHandler, CallbackContext
 from telegram import Update
-import uuid
+
 from src.general_src import make_from_guid_s3_name
-import json
-import requests
-import aiohttp
+
 
 with open('config.json', 'r') as file:
     config = json.load(file)
@@ -21,6 +26,7 @@ MEETING_STATE_SECOND = 3
 
 # make it as permament connection
 async def db_connect():
+    """Connect to the database."""
     return await asyncpg.connect(user=os.getenv("POSTGRES_USER"),
                                  password=os.getenv("POSTGRES_PASSWORD"),
                                  database=os.getenv("POSTGRES_DB"),
@@ -29,6 +35,7 @@ async def db_connect():
 
 
 async def is_user_allowed(user_id: int) -> bool:
+    """Check if the user is allowed to use the bot."""
     conn = await db_connect()
     try:
         existing_user = await conn.fetchval("SELECT user_id FROM allowed_users WHERE user_id = $1",
@@ -55,6 +62,7 @@ async def is_enough_balance_for_image(user_id: int) -> (bool, float):
 
 
 async def handle_meeting_type(update: Update, context: CallbackContext):
+    """Handles the meeting type selection."""
     query = update.callback_query
     await query.answer()
     meeting_type = str(query.data)
@@ -64,13 +72,15 @@ async def handle_meeting_type(update: Update, context: CallbackContext):
 
 
 async def handle_meeting_name(update: Update, context: CallbackContext):
+    """Handles the meeting name selection."""
     meeting_type = context.user_data.get('meeting_type')
 
    # people_names_list = get_peoples_names()
 
     # choose out of many
     #conn = await db_connect()
-    #await conn.execute("INSERT INTO feedback (timestamp, meeting_tyoe, person_name) VALUES (NOW(), $1, $2)"
+    #await conn.execute("INSERT INTO feedback (timestamp, meeting_tyoe, person_name)
+    #  VALUES (NOW(), $1, $2)"
     #                    , meeting_type, person_name)
     #await conn.close()
 
@@ -109,7 +119,6 @@ async def collect_information_on_machine_response_text(generation_id, ai_respons
                                                 , generation_id, data_type, ai_response)    
         await conn.close()
 
-    
 
 async def collect_information_on_machine_response_image(generation_id, link, is_athena):
     """
