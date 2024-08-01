@@ -45,7 +45,6 @@ jobs:
 
   pylint_manager:
     runs-on: ubuntu-latest
-    strategy:
     steps:
       - uses: actions/checkout@v4
 
