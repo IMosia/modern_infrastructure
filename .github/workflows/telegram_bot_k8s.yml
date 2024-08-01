@@ -14,7 +14,7 @@ env:
   PROJECT_NAME: danilevich_gpt_bot
 
 jobs:
-  pylint:
+  pylint_app:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -43,7 +43,7 @@ jobs:
         working-directory: ./bot/app
         continue-on-error: true
 
-  pylint:
+  pylint_manager:
     runs-on: ubuntu-latest
     strategy:
     steps:
