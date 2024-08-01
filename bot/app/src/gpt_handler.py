@@ -14,13 +14,6 @@ from telegram.ext import ContextTypes
 from openai import OpenAI
 from dotenv import load_dotenv
 
-import telegramify_markdown
-from telegramify_markdown import customize
-
-customize.markdown_symbol.head_level_1 = "📌"
-customize.markdown_symbol.link = "🔗"
-customize.strict_markdown = True
-
 sys.path.append('..')
 
 from src.decorators import (decorator_logging, decorator_check_if_user_is_allowed
@@ -30,6 +23,11 @@ from src.collection_of_info import (collect_information_on_request
                                     , collect_information_on_machine_response_text
                                     , collect_information_on_machine_response_image)
 
+import telegramify_markdown
+from telegramify_markdown import customize
+customize.markdown_symbol.head_level_1 = "📌"
+customize.markdown_symbol.link = "🔗"
+customize.strict_markdown = True
 
 # config from config.json
 with open('config.json', 'r', encoding='utf-8') as file:
@@ -143,7 +141,7 @@ async def provide_picture(update: Update, context: ContextTypes.DEFAULT_TYPE, us
             )
         )
     except:
-        await update.message.reply_text("Error while generating picture, violation of OpenAI policy")
+        await update.message.reply_text("Error while generating picture, violation of policy")
         keep_upload_photo.is_upload_photo = False
         keep_upload_photo_task.cancel()
         return

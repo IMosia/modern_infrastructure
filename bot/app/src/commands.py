@@ -4,9 +4,10 @@ The commands for the bot.
 
 import os
 import sys
-from dotenv import load_dotenv
 from datetime import datetime
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+
+from dotenv import load_dotenv
+from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler, CallbackContext
 import pytz
 from src.gpt_handler import provide_picture

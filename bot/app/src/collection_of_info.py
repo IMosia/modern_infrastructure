@@ -8,8 +8,6 @@ import json
 
 import aiohttp
 import asyncpg
-from telegram.ext import ConversationHandler, CallbackContext
-from telegram import Update
 
 from src.general_src import make_from_guid_s3_name
 
@@ -53,7 +51,10 @@ async def is_enough_balance_for_image(user_id: int) -> (bool, float):
     """
     conn = await db_connect()
     try:
-        current_balance = await conn.fetchval("SELECT balance FROM user_balances WHERE user_id = $1", user_id)
+        current_balance = await conn.fetchval(
+                            "SELECT balance FROM user_balances WHERE user_id = $1"
+                            , user_id
+                            )
         if current_balance is None:  # This means the user does not exist in the user_balances table
             return False, 0.0
         return current_balance >= IMAGE_PRICE, current_balance
@@ -73,7 +74,7 @@ async def collect_information_on_request(user_id, user_inquery, inquery_type, is
         conn = await db_connect()
         await conn.fetchval("INSERT INTO user_requests (timestamp, user_id, generation_id, user_inquery, inquery_type) VALUES (NOW(), $1, $2, $3, $4)"
                                                 , user_id, generation_id, user_inquery, inquery_type)
-            
+   
         await conn.close()
     return generation_id
 

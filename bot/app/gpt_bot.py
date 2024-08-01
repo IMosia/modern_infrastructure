@@ -12,9 +12,8 @@ from telegram.ext import (Application, CommandHandler, MessageHandler, filters
                           , ConversationHandler, CallbackQueryHandler)
 
 from src.commands import (start, world_time_now, provide_picture_and_ask_prompt
-                          , start_picture_command, start_recording_meeting)
+                          , start_picture_command)
 from src.gpt_handler import message_acrhistator
-from src.collection_of_info import handle_meeting_type, handle_meeting_name
 
 
 # env variables
@@ -38,7 +37,6 @@ def main():
     # Create the Application and pass it your bot's token.
     application = Application.builder().token(BOT_TOKEN).build()
     logging.info(f"Bot {BOT_NAME} started.")
-#gpt_bot.py:40:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("current_time",
@@ -54,17 +52,6 @@ def main():
         fallbacks=[]
     )
     application.add_handler(conv_handler)
-
-    meeting_handler = ConversationHandler(
-        entry_points=[CommandHandler('record_meeting', start_recording_meeting)],
-        states={
-            MEETING_STATE: [CallbackQueryHandler(handle_meeting_type)],
-            MEETING_STATE_SECOND: [MessageHandler(filters.TEXT & ~filters.COMMAND
-                                                  , handle_meeting_name)],
-        },
-        fallbacks=[]
-    )
-    application.add_handler(meeting_handler)
 
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_acrhistator))
 
