@@ -5,15 +5,14 @@ Module for funciton to communicate with OpenAI
 import os
 import json
 import sys
+from io import BytesIO
+import asyncio
+import requests
 
 from telegram import Update
 from telegram.ext import ContextTypes
 from openai import OpenAI
 from dotenv import load_dotenv
-
-import requests
-from io import BytesIO
-import asyncio
 
 import telegramify_markdown
 from telegramify_markdown import customize
@@ -33,7 +32,7 @@ from src.collection_of_info import (collect_information_on_request
 
 
 # config from config.json
-with open('config.json', 'r') as file:
+with open('config.json', 'r', encoding='utf-8') as file:
     config = json.load(file)
 model_version = config['model_version']
 model_constant = config['model_constant']
@@ -95,8 +94,8 @@ async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE
             await update.message.reply_text(formatted_chunk,
                                             reply_to_message_id=update.message.message_id,
                                             parse_mode="MarkdownV2")
-        except:
-            # add logging here
+        except Exception as e:
+            # TODO: add logging here for exception
             await update.message.reply_text(chunk
                                             , reply_to_message_id=update.message.message_id
                                             )
@@ -105,9 +104,10 @@ async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE
     generation_id = await collect_information_on_request(user_id, user_inquery
                                                          , inquery_type='text'
                                                          , is_athena=tables_athena)
-    await collect_information_on_machine_response_text(generation_id, ai_response, is_athena=tables_athena)
-    
-    
+    await collect_information_on_machine_response_text(generation_id, ai_response
+                                                       , is_athena=tables_athena)
+
+
 @decorator_logging
 @decorator_check_if_user_is_allowed
 @decorator_has_enough_money_for_picture
@@ -156,4 +156,6 @@ async def provide_picture(update: Update, context: ContextTypes.DEFAULT_TYPE, us
     keep_upload_photo.is_upload_photo = False
     keep_upload_photo_task.cancel()
 
-    await collect_information_on_machine_response_image(generation_id, picture_url, is_athena=tables_athena)
+    await collect_information_on_machine_response_image(generation_id
+                                                        , picture_url
+                                                        , is_athena=tables_athena)

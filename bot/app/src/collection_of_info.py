@@ -61,33 +61,6 @@ async def is_enough_balance_for_image(user_id: int) -> (bool, float):
         await conn.close()
 
 
-async def handle_meeting_type(update: Update, context: CallbackContext):
-    """Handles the meeting type selection."""
-    query = update.callback_query
-    await query.answer()
-    meeting_type = str(query.data)
-    context.user_data['meeting_type'] = meeting_type
-    await query.edit_message_text(f"So, with whom:")
-    return MEETING_STATE_SECOND
-
-
-async def handle_meeting_name(update: Update, context: CallbackContext):
-    """Handles the meeting name selection."""
-    meeting_type = context.user_data.get('meeting_type')
-
-   # people_names_list = get_peoples_names()
-
-    # choose out of many
-    #conn = await db_connect()
-    #await conn.execute("INSERT INTO feedback (timestamp, meeting_tyoe, person_name)
-    #  VALUES (NOW(), $1, $2)"
-    #                    , meeting_type, person_name)
-    #await conn.close()
-
-    return ConversationHandler.END
-
-# also adding people
-
 async def collect_information_on_request(user_id, user_inquery, inquery_type, is_athena):
     """
     Collects information on user request
@@ -103,7 +76,6 @@ async def collect_information_on_request(user_id, user_inquery, inquery_type, is
             
         await conn.close()
     return generation_id
-
 
 
 async def collect_information_on_machine_response_text(generation_id, ai_response, is_athena):

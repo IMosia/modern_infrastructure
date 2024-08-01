@@ -22,18 +22,6 @@ PROMPT_STATE = 1
 MEETING_STATE = 2
 
 @decorator_logging
-async def start_recording_meeting(update: Update, context: CallbackContext):
-    """Function to start recording a meeting."""
-    await update.message.reply_text("What was the meeting?", reply_markup=reply_markup)
-    keyboard = [
-        [InlineKeyboardButton("personal", callback_data='personal'),
-            InlineKeyboardButton("call", callback_data='call'),
-            InlineKeyboardButton("chat", callback_data='chat')]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    return MEETING_STATE
-
-@decorator_logging
 async def start_picture_command(update: Update, context: CallbackContext):
     """Function to start the picture command - ask to reply wtih a prompt."""
     await update.message.reply_text("Please provide a prompt for the picture.")
@@ -41,9 +29,7 @@ async def start_picture_command(update: Update, context: CallbackContext):
 
 @decorator_logging
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """
-    Send a message when the command /start is issued.
-    """
+    """ Send a message when the command /start is issued. """
     await update.message.reply_text(f"Greatings, call me {BOT_NAME}!")
 
 @decorator_logging
