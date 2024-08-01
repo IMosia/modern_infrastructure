@@ -16,6 +16,9 @@ env:
 jobs:
   pylint:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file: [collection_of_info.py, commands.py, decorators.py, gpt_handler.py, general_src.py]
     steps:
       - uses: actions/checkout@v4
 
@@ -40,11 +43,9 @@ jobs:
         working-directory: ./bot/app
       
       - name: Analysing dependancies with pylint
-        matrix:
-          dir: [collection_of_info.py, commands.py, decorators.py, gpt_handler.py, general_src.py]
-          run: |
-            pylint ${{ matrix.dir }}
-          working-directory: ./bot/app/src
+        run: |
+          pylint ${{ matrix.file }}
+        working-directory: ./bot/app/src
       
       - name: Analysing user_manager with pylint
         run: |
