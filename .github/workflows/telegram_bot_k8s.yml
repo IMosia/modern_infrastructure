@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        file: [collection_of_info.py, commands.py, decorators.py, gpt_handler.py, general_src.py]
+        file: [/src/collection_of_info.py, /src/commands.py, /src/decorators.py, /src/gpt_handler.py, /src/general_src.py, gpt_bot]
     steps:
       - uses: actions/checkout@v4
 
@@ -37,17 +37,32 @@ jobs:
           pip install -r requirements.txt
         working-directory: ./bot/app
 
-      - name: Analysing the code with pylint
-        run: |
-          pylint gpt_bot.py
-        working-directory: ./bot/app
-        continue-on-error: true
-      
       - name: Analysing dependancies with pylint
         run: |
           pylint ${{ matrix.file }}
-        working-directory: ./bot/app/src
+        working-directory: ./bot/app
         continue-on-error: true
+
+  pylint:
+    runs-on: ubuntu-latest
+    strategy:
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install pylint
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+        working-directory: ./bot/user_manager
       
       - name: Analysing user_manager with pylint
         run: |

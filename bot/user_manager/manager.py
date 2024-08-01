@@ -2,10 +2,11 @@
 Weeb app with Flask to manage users
 """
 
-from flask import Flask, render_template, request, redirect, url_for, flash
-import psycopg2
 import os
 import logging
+
+from flask import Flask, render_template, request, redirect, url_for, flash
+import psycopg2
 from logfmter import Logfmter
 
 formatter = Logfmter(
@@ -34,6 +35,7 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 
 def get_db_connection():
+    """Establish a connection to the database."""
     try:
         logger.info("Establishing database connection.")
         conn = psycopg2.connect(
@@ -50,6 +52,7 @@ def get_db_connection():
 
 @app.route('/')
 def index():
+    """Render the index page with a list of allowed users."""
     conn = get_db_connection()
     cur = conn.cursor()
     try:
@@ -74,6 +77,7 @@ def index():
 
 @app.route('/allow', methods=['POST'])
 def allow_user():
+    """Allow a user to access the bot."""
     user_id = request.form.get('user_id')
     conn = get_db_connection()
     cur = conn.cursor()
@@ -94,6 +98,7 @@ def allow_user():
 
 @app.route('/disable', methods=['POST'])
 def disable_user():
+    """Disable a user from accessing the bot."""
     user_id = request.form.get('user_id')
     conn = get_db_connection()
     cur = conn.cursor()
@@ -113,6 +118,7 @@ def disable_user():
 
 @app.route('/set_balance', methods=['POST'])
 def set_balance():
+    """Set the balance for a user."""
     user_id = request.form.get('user_id')
     balance = request.form.get('balance')
     conn = get_db_connection()
