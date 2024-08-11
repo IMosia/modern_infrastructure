@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: telegram-bot
-  namespace: comrade-chatgpt-bot
+  namespace: ivan-chagpt-bot
 spec:
   replicas: 1
   selector:
@@ -15,7 +15,7 @@ spec:
     spec:
       initContainers:
         - name: liquibase
-          image: ghcr.io/mossad-zika/bitrix_24_salesman_gpt-liquibase:latest
+          image: ghcr.io/imosia/danilevich_gpt_bot-liquibase:latest
           args: [
             "--changeLogFile=initial.postgres.yaml",
             "--url=jdbc:postgresql://$(DB_HOST):$(DB_PORT)/$(POSTGRES_DB)",
@@ -50,7 +50,7 @@ spec:
 
       containers:
         - name: telegram-bot
-          image: ghcr.io/mossad-zika/bitrix_24_salesman_gpt-telegram_bot:latest
+          image: ghcr.io/imosia/danilevich_gpt_bot-app:latest
           env:
             - name: POSTGRES_USER
               valueFrom:

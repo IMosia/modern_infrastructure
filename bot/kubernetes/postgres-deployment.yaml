@@ -4,7 +4,7 @@ metadata:
   name: postgres
   labels:
     app: postgres
-  namespace: comrade-chatgpt-bot
+  namespace: ivan-chagpt-bot
 spec:
   replicas: 1
   selector:
