@@ -46,3 +46,8 @@ spec:
                 secretKeyRef:
                   name: app-secrets
                   key: FLASK_SECRET_KEY
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: POSTGRES_PORT

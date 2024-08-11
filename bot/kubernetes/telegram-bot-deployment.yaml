@@ -82,7 +82,7 @@ spec:
                 secretKeyRef:
                   name: app-secrets
                   key: OPENAI_API_KEY
-            - name: TELEGRAM_BOT_TOKEN
+            - name: BOT_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: app-secrets

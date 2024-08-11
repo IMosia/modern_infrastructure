@@ -18,8 +18,8 @@ from src.gpt_handler import message_acrhistator
 
 # env variables
 load_dotenv()
-BOT_NAME =  os.getenv('BOT_NAME')
-BOT_TOKEN = os.getenv('BOT_TOKEN', 'GPT_Danilevich_bot')
+BOT_NAME =  os.getenv('BOT_NAME', 'GPT_Danilevich_bot')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 PROMPT_STATE = 1
 MEETING_STATE = 2
