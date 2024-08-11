@@ -29,15 +29,23 @@ customize.markdown_symbol.head_level_1 = "📌"
 customize.markdown_symbol.link = "🔗"
 customize.strict_markdown = True
 
-# config from config.json
-with open('config.json', 'r', encoding='utf-8') as file:
-    config = json.load(file)
-model_version = config['model_version']
-model_constant = config['model_constant']
-picture_model = config['picture_model']
-picture_quality = config['picture_quality']
-picture_resolution = config['picture_resolution']
-tables_athena = config['tables_athena']
+try:
+    # config from config.json
+    with open('config.json', 'r', encoding='utf-8') as file:
+        config = json.load(file)
+    model_version = config['model_version']
+    model_constant = config['model_constant']
+    picture_model = config['picture_model']
+    picture_quality = config['picture_quality']
+    picture_resolution = config['picture_resolution']
+    tables_athena = config['tables_athena']
+except:
+    model_version = 'gpt-4o'
+    model_constant = "You are Soviet Comrad!"
+    picture_model = 'dall-e-3'
+    picture_quality = 'standard'
+    picture_resolution = '1024x1024'
+    tables_athena = False
 
 # env variables
 load_dotenv()

@@ -19,18 +19,30 @@ from src.gpt_handler import message_acrhistator
 # env variables
 load_dotenv()
 BOT_NAME =  os.getenv('BOT_NAME')
-BOT_TOKEN = os.getenv('BOT_TOKEN')
+BOT_TOKEN = os.getenv('BOT_TOKEN', 'GPT_Danilevich_bot')
 
 PROMPT_STATE = 1
 MEETING_STATE = 2
 MEETING_STATE_SECOND = 3
 
 # config from config.json
-with open('config.json', 'r', encoding='utf-8') as file:
-    config = json.load(file)
-model_version = config['model_version']
-model_constant = config['model_constant']
-important_timezones = config['important_timezones']
+try:
+    with open('config.json', 'r', encoding='utf-8') as file:
+        config = json.load(file)
+    model_version = config['model_version']
+    model_constant = config['model_constant']
+    important_timezones = config['important_timezones']
+except:
+    model_version = 'gpt-4o'
+    model_constant = "You are Soviet Comrad!"
+    important_timezones = {
+                    "America/Vancouver": "Vancouver",
+                    "Europe/Zurich": "Switzerland",
+                    "Israel": "Israel",
+                    "Asia/Samarkand": "Samarkand",
+                    "Asia/Singapore": "Bali",
+                    "UTC": "UTC"
+    }
 
 def main():
     """Main"""

@@ -6,20 +6,25 @@ import logging
 from functools import wraps
 import asyncio
 import io
+import os
 from PIL import Image
 from src.collection_of_info import is_user_allowed, is_enough_balance_for_image
+import dotenv
+
+dotenv.load_dotenv()
 
 def decorator_logging(func):
     """Decorator to log function calls and returns"""
+    enabled_handlers=[logging.StreamHandler()]
+    if os.getenv("LOG_TO_FILE", "False").lower() == "true":
+        file_handler = logging.FileHandler("./logs/bot.log")
+        enabled_handlers.append(file_handler)
     logging.basicConfig(
         #format='timestamp=%(asctime)s logger=%(name)s level=%(levelname)s msg="%(message)s"',
         format='{"timestamp": "%(asctime)s", "logger": "%(name)s", "level": "%(levelname)s", "msg": "%(message)s"}',
         datefmt='%Y-%m-%dT%H:%M:%S',
         level=logging.INFO,
-        handlers=[
-            logging.FileHandler("./logs/bot.log"),
-            logging.StreamHandler()
-        ]
+        handlers=enabled_handlers
     )
     logging.getLogger("httpx").setLevel(logging.WARNING)
     logger = logging.getLogger(__name__)

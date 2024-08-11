@@ -12,11 +12,16 @@ import asyncpg
 from src.general_src import make_from_guid_s3_name
 
 
-with open('config.json', 'r') as file:
-    config = json.load(file)
-aws_region = config['aws_region']
-bucket_name = config['bucket_name']
-IMAGE_PRICE = config['image_price']
+try:
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+    aws_region = config['aws_region']
+    bucket_name = config['bucket_name']
+    IMAGE_PRICE = config['image_price']
+except:
+    aws_region = 'ap-southeast-1'
+    bucket_name = 'ai-response-pictures-danilevich-bot'
+    IMAGE_PRICE = 10
 
 
 MEETING_STATE_SECOND = 3
