@@ -80,6 +80,7 @@ jobs:
         dir:
           - app
           - liquibase
+          - user_manager
     steps:
       - uses: actions/checkout@v4
 
