@@ -22,4 +22,9 @@ psql -U $POSTGRES_USER -d $POSTGRES_DB -c "DELETE FROM allowed_users WHERE user_
 > Ctrl + D
 ```  
 
-**Use-manager** ```http://localhost:5005/```  
+**Use-manager** ```http://localhost:5005/``` 
+
+## k8
+```
+kubectl apply -f <deployment-name>.yaml
+```

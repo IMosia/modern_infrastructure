@@ -87,3 +87,8 @@ spec:
                 secretKeyRef:
                   name: app-secrets
                   key: TELEGRAM_BOT_TOKEN
+            - name: BOT_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: BOT_NAME

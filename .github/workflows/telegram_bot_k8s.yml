@@ -81,6 +81,7 @@ jobs:
           - app
           - liquibase
           - user_manager
+          - picture_uploader
     steps:
       - uses: actions/checkout@v4
 
