@@ -1,0 +1,16 @@
+eplicaCount: 1
+
+image_bot:
+  pullPolicy: Always
+  repository: ghcr.io/imosia/danilevich_gpt_bot-liquibase
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+image_liquibase:
+  repository: ghcr.io/imosia/danilevich_gpt_bot-user_manager
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+secret:
+  name: app-secrets
