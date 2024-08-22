@@ -137,7 +137,7 @@ jobs:
           --set image_bot.tag=${{ needs.build_and_push.outputs.new_tag_telegram_bot }} \
           --set image_liquibase.tag=${{ needs.build_and_push.outputs.new_tag_liquibase }} \
           --wait \
-          ./bot/app
+          /telegram-bot
         working-directory: ./bot/charts
 
   deploy_manager:
@@ -165,5 +165,5 @@ jobs:
           user-manager \
           --set image.tag=${{ needs.build_and_push.outputs.new_tag_manager }} \
           --wait \
-          ./bot/user_manager
+          /user_manager
         working-directory: ./bot/charts
