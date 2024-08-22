@@ -1,4 +1,5 @@
 eplicaCount: 1
+commitHash: ""
 
 image_bot:
   pullPolicy: Always

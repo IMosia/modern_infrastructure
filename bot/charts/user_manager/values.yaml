@@ -1,0 +1,17 @@
+replicaCount: 1
+commitHash: ""
+
+image:
+  repository: ghcr.io/mossad-zika/bitrix_24_salesman_gpt-user_manager
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+container:
+  port: 5000
+
+service:
+  port: 5000
+
+secret:
+  name: app-secrets

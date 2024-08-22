@@ -110,7 +110,7 @@ jobs:
           echo "new_tag_${{ matrix.dir }}=$TAG" >> $GITHUB_OUTPUT
         id: push_image
 
-  deploy:
+  deploybot:
     runs-on: ubuntu-latest
     needs:
       - build_and_push
@@ -137,4 +137,32 @@ jobs:
           --set image_liquibase.tag=${{ needs.build_and_push.outputs.new_tag_liquibase }} \
           --wait \
           ./telegram-bot
+        working-directory: ./charts
+
+  deploy_manager:
+    runs-on: ubuntu-latest
+    needs:
+      - build_and_push
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: EKS login
+        run: |
+          aws eks \
+          --region ${{ vars.AWS_REGION }} \
+          update-kubeconfig \
+          --name ${{ vars.EKS_NAME }}
+
+      - uses: azure/setup-helm@v4.2.0
+
+      - name: helm upgrade --install
+        run: |
+          helm \
+          upgrade --install \
+          --namespace ${{ vars.KUBE_NS }} \
+          --create-namespace \
+          user-manager \
+          --set image.tag=${{ needs.build_and_push.outputs.new_tag_manager }} \
+          --wait \
+          ./user-manager
         working-directory: ./charts

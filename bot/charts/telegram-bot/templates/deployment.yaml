@@ -20,7 +20,7 @@ spec:
           imagePullPolicy: {{ .Values.image_liquibase.pullPolicy }}
           args: [
             "--changeLogFile=initial.postgres.yaml",
-            "--url=jdbc:postgresql://$(DB_HOST):5432/$(POSTGRES_DB)",
+            "--url=jdbc:postgresql://$(DB_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)",
             "update"
           ]
           env:
@@ -44,6 +44,11 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.secret.name }}
                   key: DB_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secret.name }}
+                  key: POSTGRES_PORT
       containers:
         - name: telegram-bot
           image: "{{ .Values.image_bot.repository }}:{{ .Values.image_bot.tag | default .Chart.AppVersion }}"
