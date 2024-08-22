@@ -138,7 +138,7 @@ jobs:
           --set image_liquibase.tag=${{ needs.build_and_push.outputs.new_tag_liquibase }} \
           --wait \
           ./bot/app
-        working-directory: bot/charts
+        working-directory: ./bot/charts
 
   deploy_manager:
     runs-on: ubuntu-latest
@@ -166,4 +166,4 @@ jobs:
           --set image.tag=${{ needs.build_and_push.outputs.new_tag_manager }} \
           --wait \
           ./bot/user_manager
-        working-directory: bot/charts
+        working-directory: ./bot/charts
