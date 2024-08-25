@@ -1,14 +1,14 @@
 eplicaCount: 1
 commitHash: ""
 
-image_bot:
+image_liquibase:
   pullPolicy: Always
   repository: ghcr.io/imosia/danilevich_gpt_bot-liquibase
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
-image_liquibase:
-  repository: ghcr.io/imosia/danilevich_gpt_bot-user_manager
+image_bot:
+  repository: ghcr.io/imosia/danilevich_gpt_bot-app
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
