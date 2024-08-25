@@ -75,7 +75,7 @@ jobs:
     outputs:
       new_tag_liquibase: ${{ steps.push_image.outputs.new_tag_liquibase }}
       new_tag_telegram_bot: ${{ steps.push_image.outputs.new_tag_app}}
-      new_tag_manager: ${{ steps.push_image.outputs.new_tag_manager }}
+      new_tag_manager: ${{ steps.push_image.outputs.new_tag_user_manager }}
       new_tag_picture_uploader: ${{ steps.push_image.outputs.new_tag_picture_uploader }}
     permissions:
       contents: read
@@ -163,7 +163,7 @@ jobs:
           upgrade --install \
           --namespace ${{ vars.KUBE_NS }} \
           --create-namespace \
-          user-manager \
+          usermanager \
           --set image.tag=${{ needs.build_and_push.outputs.new_tag_manager }} \
           --wait \
           ./user_manager
