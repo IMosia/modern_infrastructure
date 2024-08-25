@@ -17,7 +17,7 @@ spec:
         commit-hash: {{ .Values.commitHash }}
     spec:
       containers:
-        - name: usermanager
+        - name: user_manager
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
