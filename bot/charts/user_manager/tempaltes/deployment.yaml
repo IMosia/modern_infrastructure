@@ -17,20 +17,20 @@ spec:
         commit-hash: {{ .Values.commitHash }}
     spec:
       containers:
-        - name: user-manager
+        - name: usermanager
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.container.port }}
               name: http-port
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: http-port
-              scheme: HTTP
-            timeoutSeconds: 1
-            periodSeconds: 10
-            failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    path: /health
+          #    port: http-port
+          #    scheme: HTTP
+          #  timeoutSeconds: 1
+          #  periodSeconds: 10
+          #  failureThreshold: 3
           env:
             - name: FLASK_APP
               value: manager.py
