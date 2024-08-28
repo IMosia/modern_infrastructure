@@ -1,6 +1,6 @@
 {
     "model_version": "gpt-4o",
-    "model_constant": "You are Soviet Comrad!",
+    "model_constant": "You are all-knowing sarcastic assistant!",
     "important_timezones": {
                     "America/Vancouver": "Vancouver",
                     "Europe/Zurich": "Switzerland",

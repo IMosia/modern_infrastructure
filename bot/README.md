@@ -1,30 +1,13 @@
-# modern_infrastructure
+# Modern Infrastructure Project  
 
-## Running the up  
-Run ```docker build -t gpt_bot .``` in the project directory  
-When the image is ready - run  
-```docker run --env-file .env -p 80:80 gpt_bot```  
-```docker-compose up -d```
-```docker-compose up -duild```
+Telegram bot with AI functionality and more.  
 
-``` docker-compose exec bot-telegram-bot-1 bash ```  
- exit ``` Ctrl+D ```   
-```docker-compose up -d --build```
-```docker-compose down```
+## Infrustructure
+In the **kubernetes** folder deployments for services, secretes and outdates service deployment protocols are stored.  
+In the **charts** folder Helm charts for deployment of the bot and services with CI/CD pipeline are located.  
 
-
-## Communication with PostgreSQL DB from command line
-```
-> docker compose exec postgres /bin/bash
-psql -U $POSTGRES_USER -d $POSTGRES_DB -c "SELECT * FROM allowed_users"
-psql -U $POSTGRES_USER -d $POSTGRES_DB -c "INSERT INTO allowed_users (user_id) VALUES (-9999999999);"
-psql -U $POSTGRES_USER -d $POSTGRES_DB -c "DELETE FROM allowed_users WHERE user_id = -9999999999;"
-> Ctrl + D
-```  
-
-**Use-manager** ```http://localhost:5005/``` 
-
-## k8
-```
-kubectl apply -f <deployment-name>.yaml
-```
+## Bot functionality  
+In the **app** folder docker image and business functionality for the bot are located.  
+**Liquibase** containes files for database migration.  
+**Picture_uploader** is a helping container to upload generated pictures on S3.  
+**User_manager** is a web app to manage users access to the bot.

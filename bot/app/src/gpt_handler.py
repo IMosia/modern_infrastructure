@@ -23,29 +23,17 @@ from src.collection_of_info import (collect_information_on_request
                                     , collect_information_on_machine_response_text
                                     , collect_information_on_machine_response_image)
 
-import telegramify_markdown
-from telegramify_markdown import customize
-customize.markdown_symbol.head_level_1 = "📌"
-customize.markdown_symbol.link = "🔗"
-customize.strict_markdown = True
 
-try:
-    # config from config.json
-    with open('config.json', 'r', encoding='utf-8') as file:
-        config = json.load(file)
-    model_version = config['model_version']
-    model_constant = config['model_constant']
-    picture_model = config['picture_model']
-    picture_quality = config['picture_quality']
-    picture_resolution = config['picture_resolution']
-    tables_athena = config['tables_athena']
-except:
-    model_version = 'gpt-4o'
-    model_constant = "You are Soviet Comrad!"
-    picture_model = 'dall-e-3'
-    picture_quality = 'standard'
-    picture_resolution = '1024x1024'
-    tables_athena = False
+# config from config.json
+with open('config.json', 'r', encoding='utf-8') as file:
+    config = json.load(file)
+model_version = config['model_version']
+model_constant = config['model_constant']
+picture_model = config['picture_model']
+picture_quality = config['picture_quality']
+picture_resolution = config['picture_resolution']
+tables_athena = config['tables_athena']
+
 
 # env variables
 load_dotenv()
@@ -92,16 +80,11 @@ async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE
 
     for chunk in chunks_of_response:
         try:
-            formatted_chunk = telegramify_markdown.markdownify(
-                    chunk,
-                    max_line_length=None,
-                    normalize_whitespace=False
-                )
+            formatted_chunk = escape_markdown(chunk)
             await update.message.reply_text(formatted_chunk,
                                             reply_to_message_id=update.message.message_id,
                                             parse_mode="MarkdownV2")
         except Exception as e:
-            # TODO: add logging here for exception
             await update.message.reply_text(chunk
                                             , reply_to_message_id=update.message.message_id
                                             )
