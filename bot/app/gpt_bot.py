@@ -25,6 +25,7 @@ PROMPT_STATE = 1
 MEETING_STATE = 2
 MEETING_STATE_SECOND = 3
 
+
 # config from config.json
 try:
     with open('config.json', 'r', encoding='utf-8') as file:
