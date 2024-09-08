@@ -1,0 +1,22 @@
+apiVersion: skaffold/v4beta10
+kind: Config
+metadata:
+  name: ivan-chagpt-bot-dev
+build:
+  artifacts:
+  - image: danilevich_gpt_bot_liquibase
+    context: liquibase
+  - image: danilevich_gpt_bot_app
+    context: app
+deploy:
+  kubeContext: arn:aws:eks:eu-central-1:632497825040:cluster/iac-001-study-cluster
+  helm:
+    releases:
+    - name: telegram-bot
+      namespace: ivan-chagpt-bot-dev
+      chartPath: charts/telegram-bot
+      setValueTemplates:
+        image_liquibase.repository: "{{.IMAGE_REPO_danilevich_gpt_bot_liquibase}}"
+        image_liquibase.tag: "{{.IMAGE_TAG_danilevich_gpt_bot_liquibase}}@{{.IMAGE_DIGEST_danilevich_gpt_bot_liquibase}}"
+        image_bot.repository: "{{.IMAGE_REPO_danilevich_gpt_bot_app}}"
+        image_bot.tag: "{{.IMAGE_TAG_danilevich_gpt_bot_app}}@{{.IMAGE_DIGEST_danilevich_gpt_bot_app}}"
