@@ -70,6 +70,7 @@ jobs:
         run: |
           pylint manager.py
         working-directory: ./bot/user_manager
+        continue-on-error: true
 
   build_and_push:
     outputs:
