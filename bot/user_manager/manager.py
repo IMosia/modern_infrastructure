@@ -58,22 +58,22 @@ def get_db_connection():
         logger.error(f"Error establishing database connection: {e}")
         raise
 
-def check_db_health():
-    """
-    Check if the database connection is healthy.
-    """
-    try:
-        conn = await get_db_connection()
-        await conn.fetchval("SELECT 1")
-        await conn.close()
-        with open(HEALTH_FILE_PATH, "w", encoding="utf-8") as health_file:
-            health_file.write("healthy")
-        return True
-    except Exception as e:
-        logger.error("Error checking database health: %s", e)
-        if os.path.exists(HEALTH_FILE_PATH):
-            os.remove(HEALTH_FILE_PATH)
-        return False
+#def check_db_health():
+#    """
+#    Check if the database connection is healthy.
+#    """
+#    try:
+#        conn = await get_db_connection()
+#        await conn.fetchval("SELECT 1")
+#        await conn.close()
+#        with open(HEALTH_FILE_PATH, "w", encoding="utf-8") as health_file:
+#            health_file.write("healthy")
+#        return True
+#    except Exception as e:
+#        logger.error("Error checking database health: %s", e)
+#        if os.path.exists(HEALTH_FILE_PATH):
+#            os.remove(HEALTH_FILE_PATH)
+#        return False
 
 
 @app.route('/')
@@ -196,13 +196,13 @@ def health():
         conn.close()
 
 def main():
-    logger.info("Checking database connection...")
-    loop = asyncio.get_event_loop()
-    health_check_passed = loop.run_until_complete(check_db_health())
-    if not health_check_passed:
-        logger.error("Database connection is not healthy. Exiting.")
-        return
-    logger.info("Database connection is healthy.")
+    #logger.info("Checking database connection...")
+    #loop = asyncio.get_event_loop()
+    #health_check_passed = loop.run_until_complete(check_db_health())
+    #if not health_check_passed:
+    #    logger.error("Database connection is not healthy. Exiting.")
+     #   return
+    #logger.info("Database connection is healthy.")
     app.run(debug=True)
 
 if __name__ == '__main__':
