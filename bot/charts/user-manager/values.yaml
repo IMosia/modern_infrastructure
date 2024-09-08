@@ -15,3 +15,7 @@ service:
 
 secret:
   name: app-secrets
+
+ingress:
+  enabled: true
+  host: um-imosia.danilevich-it-school.com
