@@ -41,17 +41,22 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY")
 # Health check file path
 HEALTH_FILE_PATH = "/tmp/health"
 
+HOST = os.getenv("DB_HOST")
+DB = os.getenv("POSTGRES_DB")
+USER = os.getenv("POSTGRES_USER")
+PASSWORD = os.getenv("POSTGRES_PASSWORD")
+PORT = int(os.getenv("POSTGRES_PORT"))
 
 def get_db_connection():
     """Establish a connection to the database."""
     try:
         logger.info("Establishing database connection.")
         conn = psycopg2.connect(
-            host=os.getenv("DB_HOST"),
-            database=os.getenv("POSTGRES_DB"),
-            user=os.getenv("POSTGRES_USER"),
-            password=os.getenv("POSTGRES_PASSWORD"),
-            port=int(os.getenv("DB_PORT"))
+            host=HOST,
+            database=DB,
+            user=USER,
+            password=PASSWORD,
+            port=PORT
         )
         return conn
     except Exception as e:

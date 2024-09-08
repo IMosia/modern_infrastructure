@@ -44,16 +44,16 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.secret.name }}
                   key: POSTGRES_PASSWORD
-            - name: POSTGRES_DB
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: POSTGRES_DB
             - name: POSTGRES_PORT
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secret.name }}
                   key: POSTGRES_PORT
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secret.name }}
+                  key: POSTGRES_DB
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
