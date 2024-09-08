@@ -165,7 +165,7 @@ jobs:
           --namespace ${{ vars.KUBE_NS }} \
           --create-namespace \
           user-manager \
-          --set image_user_manager.tag=${{ needs.build_and_push.outputs.new_tag_user_manager }} \
+          --set image_user_manager.tag=latest \
           --wait \
           ./user-manager
         working-directory: ./bot/charts
