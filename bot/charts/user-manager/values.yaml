@@ -18,4 +18,4 @@ secret:
 
 ingress:
   enabled: true
-  host: um_imosia.danilevich-it-school.com
+  host: um-imosia.danilevich-it-school.com
