@@ -29,11 +29,10 @@ def split_into_chunks(text, chunk_size=4096):
 
 
 def escape_markdown(text: str) -> str:
-    """Helper function to escape telegram markup symbols."""
+    """Helper function to escape Telegram MarkdownV2 markup symbols."""
 
-    escape_chars = r"\_*[]()~>#+-=|{}.!"
-
-    return re.sub(f"([{re.escape(escape_chars)}])", r"\\\1", text)
+    escape_chars = r"[_*\[\]()~>`#+\-=|{}.!]"
+    return re.sub(f'([{escape_chars}])', r'\\\1', text)
 
 def make_from_guid_s3_name(guid: str) -> str:
     """
