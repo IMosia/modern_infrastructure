@@ -5,8 +5,10 @@ metadata:
   name: {{ include "user-manager.fullname" . }}
   labels:
     {{- include "user-manager.labels" . | nindent 4 }}
- # annotations:
- #   nginx.ingress.kubernetes.io/whitelist-source-range: "0.0.0.0/0"
+  annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: "0.0.0.0/0"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.cluster_issuer }}
 spec:
   ingressClassName: nginx
   rules:
@@ -20,4 +22,8 @@ spec:
                 name: {{ include "user-manager.fullname" . }}
                 port:
                   name: http-port
+  tls:
+  - hosts:
+      - {{ .Values.ingress.host }}
+    secretName: {{ .Values.ingress.host }}-tls
 {{- end }}
