@@ -60,7 +60,18 @@ def main():
 
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_acrhistator))
 
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
+        if os.getenv("WEBHOOK_ENABLED", "False").lower() == "true":
+        logger.info("Starting webhook mode.")
+        application.run_webhook(
+            listen="0.0.0.0",
+            port=int(os.getenv("WEBHOOK_PORT", "8443")),
+            secret_token=os.getenv("WEB_HOOK_SECRET_TOKEN"),
+            allowed_updates=Update.ALL_TYPES,
+            webhook_url=os.getenv("WEBHOOK_URL"),
+        )
+    else:
+        logger.info("Starting polling mode.")
+        application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
 if __name__ == '__main__':

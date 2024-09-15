@@ -15,3 +15,15 @@ image_bot:
 
 secret:
   name: app-secrets
+
+service:
+  port: 8443
+
+ingress:
+  enabled: true
+  host: salesman-webhook.danilevich-it-school.com
+  cluster_issuer: cert-manager
+
+webhook:
+  enabled: true
+  port: 8443
