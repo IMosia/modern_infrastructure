@@ -23,8 +23,11 @@ async def request_handler(request):
     picture_name = data['picture_name']
     bucket_name = data['bucket_name']
     response = requests.get(link)
-    s3 = boto3.client('s3', region_name=REGION_NAME,
-            aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+    s3 = boto3.client('s3'
+            , region_name=REGION_NAME
+            , aws_access_key_id=AWS_ACCESS_KEY_ID
+            , aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+    )
     if response.status_code == 200:
         s3.put_object(Bucket=bucket_name, Key=picture_name, Body=response.content)
         print(f"Picture {picture_name} uploaded to S3, address: {bucket_name}/{picture_name}")

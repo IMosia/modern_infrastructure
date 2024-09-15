@@ -14,7 +14,28 @@ image_bot:
   tag: ""
 
 secret:
-  name: app-secrets
+  #name: app-secrets
+  name: app-secrets-bot
+  useExisting: true
+  arn: "arn:aws:secretsmanager:eu-central-1:632497825040:secret:/ivan_secretes-d56UfE"
+  region: "eu-central-1"
+  keys:
+    - DALL_E_MODEL
+    - DB_HOST
+    - FLASK_SECRET_KEY
+    - GPT_MODEL
+    - IMAGE_PRICE
+    - OPENAI_API_KEY
+    - POSTGRES_DB
+    - POSTGRES_PASSWORD
+    - POSTGRES_PORT
+    - POSTGRES_USER
+    - TELEGRAM_BOT_TOKEN
+    - S3_IMAGES_UPLOAD_BUCKET
+    - S3_IMAGES_UPLOAD_DESTINATION
+    - WEBHOOK_ENABLED
+    - WEBHOOK_URL
+    - WEBHOOK_SECRET_TOKEN
 
 service:
   port: 8443

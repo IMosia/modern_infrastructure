@@ -15,6 +15,13 @@ spec:
         {{- include "telegram-bot.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "secret-provider-class"
       initContainers:
         - name: liquibase
           image: "{{ .Values.image_liquibase.repository }}:{{ .Values.image_liquibase.tag | default .Chart.AppVersion }}"
@@ -56,65 +63,10 @@ spec:
           imagePullPolicy: {{ .Values.image_bot.pullPolicy }}
           ports:
             - containerPort: {{ .Values.webhook.port }}
-          env:
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: POSTGRES_USER
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: POSTGRES_PASSWORD
-            - name: POSTGRES_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: POSTGRES_PORT
-            - name: POSTGRES_DB
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: POSTGRES_DB
-            - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: DB_HOST
-            - name: OPENAI_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: OPENAI_API_KEY
-            - name: BOT_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: BOT_TOKEN
-            - name: IMAGE_PRICE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: IMAGE_PRICE
-            - name: WEBHOOK_ENABLED
-              value: "{{ .Values.webhook.enabled }}"
-            {{ if .Values.webhook.enabled }}
-            - name: WEB_HOOK_SECRET_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: WEB_HOOK_SECRET_TOKEN
-            - name: WEBHOOK_URL
-              value: {{ .Values.ingress.host }}
-            {{ end }}
-            - name: S3_IMAGES_UPLOAD_BUCKET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: S3_IMAGES_UPLOAD_BUCKET
-            - name: S3_IMAGES_UPLOAD_DESTINATION
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.secret.name }}
-                  key: S3_IMAGES_UPLOAD_DESTINATION
+          volumeMounts:
+            - name: secrets-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+          envFrom:
+            - secretRef:
+                name: {{ .Values.secret.name }}

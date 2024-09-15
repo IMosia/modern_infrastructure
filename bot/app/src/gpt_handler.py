@@ -80,11 +80,12 @@ async def message_acrhistator(update: Update, context: ContextTypes.DEFAULT_TYPE
 
     for chunk in chunks_of_response:
         try:
-            formatted_chunk = escape_markdown(chunk)
-            await update.message.reply_text(formatted_chunk,
-                                            reply_to_message_id=update.message.message_id,
-                                            parse_mode="MarkdownV2")
-        except Exception as e:
+            await update.message.reply_text(chunk
+                                            , reply_to_message_id=update.message.message_id
+                                            , parse_mode='MarkdownV2'
+                                            )
+        except:
+            # add logging here
             await update.message.reply_text(chunk
                                             , reply_to_message_id=update.message.message_id
                                             )
