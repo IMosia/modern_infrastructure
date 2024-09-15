@@ -138,6 +138,7 @@ jobs:
           app \
           --set image_bot.tag=${{ needs.build_and_push.outputs.new_tag_telegram_bot }} \
           --set image_liquibase.tag=${{ needs.build_and_push.outputs.new_tag_liquibase }} \
+          --set serviceAccount.aws_role_arn=${{ vars.AWS_ROLE_ARN }} \
           --wait \
           ./telegram-bot
         working-directory: ./bot/charts

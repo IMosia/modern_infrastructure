@@ -27,3 +27,7 @@ ingress:
 webhook:
   enabled: true
   port: 8443
+
+serviceAccount:
+  name: sa-ivan-bot
+  aws_role_arn: ""
