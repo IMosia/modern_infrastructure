@@ -60,7 +60,7 @@ def main():
 
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_acrhistator))
 
-        if os.getenv("WEBHOOK_ENABLED", "False").lower() == "true":
+    if os.getenv("WEBHOOK_ENABLED", "False").lower() == "true":
         logger.info("Starting webhook mode.")
         application.run_webhook(
             listen="0.0.0.0",
