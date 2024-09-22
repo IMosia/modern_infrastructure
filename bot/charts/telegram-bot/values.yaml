@@ -1,4 +1,4 @@
-eplicaCount: 1
+replicaCount: 1
 commitHash: ""
 
 image_liquibase:
